@@ -1,0 +1,25 @@
+app:
+  name: gin-demo
+  env: dev
+
+server:
+  host: 0.0.0.0
+  port: 8080
+  read_timeout: 10s
+  write_timeout: 10s
+  ssl:
+    enabled: false
+    cert_file: ""
+    key_file: ""
+
+log:
+  level: info
+  dir: logs
+  filename: app
+  rotate_by: day
+  retention_days: 7
+
+database:
+  driver: sqlite
+  dsn: data/gin-demo.db
+  auto_migrate: true
