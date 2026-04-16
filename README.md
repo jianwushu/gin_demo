@@ -8,6 +8,7 @@
 - 数据库初始化与自动迁移
 - 用户 CRUD 示例
 - 基础健康检查接口
+- Swagger 文档（可配置开启）
 
 ## 目录结构
 
@@ -79,6 +80,25 @@ curl http://127.0.0.1:8080/api/v1/users
 - `log.retention_days`：日志文件保留天数，默认 `7`
 - `database.driver`：当前支持 `sqlite`
 - `database.dsn`：SQLite 文件路径
+- `swagger.enabled`：是否开启 Swagger，默认 `false`，且仅允许在 `app.env: dev` 时启用
+
+### Swagger 开启示例
+
+```yaml
+app:
+  env: dev
+
+swagger:
+  enabled: true
+```
+
+开启后可访问：`GET /swagger/index.html`
+
+### 重新生成 Swagger 文档
+
+```bash
+go run github.com/swaggo/swag/cmd/swag@v1.16.6 init -g cmd/server/main.go -o docs
+```
 
 ## 日志输出
 

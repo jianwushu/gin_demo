@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	docs "gin-demo/docs"
 	appconfig "gin-demo/internal/config"
 	"gin-demo/internal/handler"
 	"gin-demo/internal/middleware"
@@ -16,6 +17,8 @@ import (
 	pkglogger "gin-demo/pkg/logger"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	_ "modernc.org/sqlite"
@@ -52,7 +55,7 @@ func NewApp(configPath string) (*App, error) {
 
 	router := gin.New()
 	router.Use(gin.Recovery(), middleware.Audit(logger))
-	registerRoutes(router, db)
+	registerRoutes(router, db, cfg)
 
 	server := &http.Server{
 		Addr:         cfg.Server.Address(),
@@ -96,10 +99,15 @@ func newDatabase(cfg *appconfig.Config) (*gorm.DB, error) {
 	return db, nil
 }
 
-func registerRoutes(router *gin.Engine, db *gorm.DB) {
+func registerRoutes(router *gin.Engine, db *gorm.DB, cfg *appconfig.Config) {
 	router.GET("/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
+
+	if cfg.Swagger.Enabled && cfg.App.Env == "dev" {
+		docs.SwaggerInfo.BasePath = "/"
+		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	userRepo := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)

@@ -1,3 +1,9 @@
+// Package main gin-demo service.
+//
+// @title gin-demo API
+// @version 1.0
+// @description gin-demo 示例接口文档
+// @BasePath /
 package main
 
 import (

@@ -13,6 +13,7 @@ type Config struct {
 	Server   ServerConfig   `yaml:"server"`
 	Log      LogConfig      `yaml:"log"`
 	Database DatabaseConfig `yaml:"database"`
+	Swagger  SwaggerConfig  `yaml:"swagger"`
 }
 
 type AppConfig struct {
@@ -48,6 +49,10 @@ type DatabaseConfig struct {
 	AutoMigrate bool   `yaml:"auto_migrate"`
 }
 
+type SwaggerConfig struct {
+	Enabled bool `yaml:"enabled"`
+}
+
 func Default() *Config {
 	return &Config{
 		App: AppConfig{
@@ -71,6 +76,9 @@ func Default() *Config {
 			Driver:      "sqlite",
 			DSN:         "data/gin-demo.db",
 			AutoMigrate: true,
+		},
+		Swagger: SwaggerConfig{
+			Enabled: false,
 		},
 	}
 }
@@ -126,6 +134,9 @@ func (c *Config) Validate() error {
 		if c.Server.SSL.CertFile == "" || c.Server.SSL.KeyFile == "" {
 			return fmt.Errorf("server.ssl.cert_file and server.ssl.key_file are required when ssl is enabled")
 		}
+	}
+	if c.Swagger.Enabled && c.App.Env != "dev" {
+		return fmt.Errorf("swagger can only be enabled when app.env is dev")
 	}
 
 	return nil

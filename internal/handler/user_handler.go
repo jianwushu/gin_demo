@@ -7,6 +7,7 @@ import (
 	"gin-demo/internal/dto"
 	"gin-demo/internal/service"
 	"gin-demo/pkg/response"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +27,16 @@ func (h *UserHandler) RegisterRoutes(router gin.IRoutes) {
 	router.DELETE("/users/:id", h.Delete)
 }
 
+// Create godoc
+// @Summary 创建用户
+// @Description 创建一个新用户
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param request body dto.CreateUserRequest true "创建用户请求"
+// @Success 201 {object} response.Body
+// @Failure 400 {object} response.Body
+// @Router /api/v1/users [post]
 func (h *UserHandler) Create(c *gin.Context) {
 	var req dto.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -42,6 +53,14 @@ func (h *UserHandler) Create(c *gin.Context) {
 	response.Created(c, user)
 }
 
+// List godoc
+// @Summary 查询用户列表
+// @Description 查询全部用户
+// @Tags users
+// @Produce json
+// @Success 200 {object} response.Body
+// @Failure 500 {object} response.Body
+// @Router /api/v1/users [get]
 func (h *UserHandler) List(c *gin.Context) {
 	users, err := h.service.List(c.Request.Context())
 	if err != nil {
@@ -51,6 +70,16 @@ func (h *UserHandler) List(c *gin.Context) {
 	response.Success(c, users)
 }
 
+// GetByID godoc
+// @Summary 查询用户详情
+// @Description 根据 ID 查询用户
+// @Tags users
+// @Produce json
+// @Param id path int true "用户ID"
+// @Success 200 {object} response.Body
+// @Failure 400 {object} response.Body
+// @Failure 404 {object} response.Body
+// @Router /api/v1/users/{id} [get]
 func (h *UserHandler) GetByID(c *gin.Context) {
 	id, ok := parseID(c)
 	if !ok {
@@ -65,6 +94,18 @@ func (h *UserHandler) GetByID(c *gin.Context) {
 	response.Success(c, user)
 }
 
+// Update godoc
+// @Summary 更新用户
+// @Description 根据 ID 更新用户信息
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path int true "用户ID"
+// @Param request body dto.UpdateUserRequest true "更新用户请求"
+// @Success 200 {object} response.Body
+// @Failure 400 {object} response.Body
+// @Failure 404 {object} response.Body
+// @Router /api/v1/users/{id} [put]
 func (h *UserHandler) Update(c *gin.Context) {
 	id, ok := parseID(c)
 	if !ok {
@@ -89,6 +130,16 @@ func (h *UserHandler) Update(c *gin.Context) {
 	response.Success(c, user)
 }
 
+// Delete godoc
+// @Summary 删除用户
+// @Description 根据 ID 删除用户
+// @Tags users
+// @Produce json
+// @Param id path int true "用户ID"
+// @Success 200 {object} response.Body
+// @Failure 400 {object} response.Body
+// @Failure 404 {object} response.Body
+// @Router /api/v1/users/{id} [delete]
 func (h *UserHandler) Delete(c *gin.Context) {
 	id, ok := parseID(c)
 	if !ok {

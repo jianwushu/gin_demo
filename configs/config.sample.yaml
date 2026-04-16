@@ -23,3 +23,6 @@ database:
   driver: sqlite
   dsn: data/gin-demo.db
   auto_migrate: true
+
+swagger:
+  enabled: true
