@@ -104,7 +104,7 @@ func registerRoutes(router *gin.Engine, db *gorm.DB, cfg *appconfig.Config) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
-	if cfg.Swagger.Enabled && cfg.App.Env == "dev" {
+	if cfg.Swagger.Enabled {
 		docs.SwaggerInfo.BasePath = "/"
 		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}

@@ -80,7 +80,7 @@ curl http://127.0.0.1:8080/api/v1/users
 - `log.retention_days`：日志文件保留天数，默认 `7`
 - `database.driver`：当前支持 `sqlite`
 - `database.dsn`：SQLite 文件路径
-- `swagger.enabled`：是否开启 Swagger，默认 `false`，且仅允许在 `app.env: dev` 时启用
+- `swagger.enabled`：是否开启 Swagger，默认 `false`
 
 ### Swagger 开启示例
 
