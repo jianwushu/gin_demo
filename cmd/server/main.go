@@ -20,16 +20,14 @@ func main() {
 	flag.Parse()
 
 	if _, err := os.Stat(*configPath); err != nil {
-		if os.IsNotExist(err) {
-			*configPath = "configs/config.sample.yaml"
-		} else {
-			panic(fmt.Errorf("stat config file: %w", err))
-		}
+		fmt.Printf("stat config file: %s", err)
+		return
 	}
 
 	app, err := bootstrap.NewApp(*configPath)
 	if err != nil {
-		panic(err)
+		fmt.Printf("create app: %s", err)
+		return
 	}
 
 	app.Logger.Printf("server starting on %s", app.Config.Server.Address())
